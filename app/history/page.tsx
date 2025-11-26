@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { ArrowLeft, Calendar, TrendingDown, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -16,15 +16,15 @@ export default function HistoryPage() {
   const [records, setRecords] = useState<SleepRecord[]>([])
   const [period, setPeriod] = useState<7 | 14 | 30>(30)
 
+  const loadRecords = useCallback(() => {
+    const data = getRecentSleepRecords(period)
+    setRecords(data)
+  }, [period])
+
   useEffect(() => {
     setMounted(true)
     loadRecords()
-  }, [period])
-
-  const loadRecords = () => {
-    const data = getRecentSleepRecords(period)
-    setRecords(data)
-  }
+  }, [loadRecords])
 
   if (!mounted) return null
 

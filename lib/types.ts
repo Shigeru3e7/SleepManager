@@ -21,6 +21,7 @@ export interface UserSettings {
   notificationsEnabled: boolean
   bedtimeReminderMinutes: number // how many minutes before bedtime to remind
   timeFormat: "12h" | "24h" // time display format, default 12h
+  themePreference: "light" | "dark" // persisted UI preference
 }
 
 export interface WeeklyQuestionnaire {

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
+import { AppInitializer } from '@/components/app-initializer'
 import './globals.css'
 
 const poppins = Poppins({ 
@@ -46,6 +47,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <AppInitializer />
           {children}
         </ThemeProvider>
         <Analytics />

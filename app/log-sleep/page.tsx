@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Save, Moon } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -45,7 +45,7 @@ export default function LogSleepPage() {
     setBedtime(defaultBedtime.toTimeString().slice(0, 5))
   }, [])
 
-  const calculateSleep = () => {
+  const calculateSleep = useCallback(() => {
     if (!bedtime || !wakeTime) return
 
     const settings = getUserSettings()
@@ -136,13 +136,11 @@ export default function LogSleepPage() {
       cycles: completeCycles,
       debtMinutes,
     })
-  }
+  }, [bedtime, wakeTime, fallAsleepTime])
 
   useEffect(() => {
-    if (bedtime && wakeTime) {
-      calculateSleep()
-    }
-  }, [bedtime, wakeTime, fallAsleepTime])
+    calculateSleep()
+  }, [calculateSleep])
 
   const handleSubmit = () => {
     if (!calculatedSleep || !bedtime || !wakeTime) return

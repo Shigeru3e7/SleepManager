@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -12,6 +13,7 @@ import type { UserSettings } from "@/lib/types"
 
 export default function OnboardingPage() {
   const router = useRouter()
+  const { resolvedTheme } = useTheme()
   const [step, setStep] = useState(1)
   const [age, setAge] = useState("")
   const [fallAsleepTime, setFallAsleepTime] = useState("15")
@@ -29,6 +31,7 @@ export default function OnboardingPage() {
       notificationsEnabled: false,
       bedtimeReminderMinutes: 30,
       timeFormat: "12h", // default to 12-hour format
+      themePreference: resolvedTheme === "dark" ? "dark" : "light",
     }
 
     saveUserSettings(settings)

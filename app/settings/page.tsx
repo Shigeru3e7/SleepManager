@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { ArrowLeft, Save, Moon, Sun, Trash2, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -33,16 +33,7 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false)
   const [optimizedCycle, setOptimizedCycle] = useState<number | null>(null)
 
-  useEffect(() => {
-    setMounted(true)
-    const current = getUserSettings()
-    if (current) {
-      setSettings(current)
-      calculateOptimalCycle()
-    }
-  }, [])
-
-  const calculateOptimalCycle = () => {
+  const calculateOptimalCycle = useCallback(() => {
     const records = getSleepRecords().filter((r) => r.wakeQualityRating)
     if (records.length < 5) return
 
@@ -73,7 +64,17 @@ export default function SettingsPage() {
     if (bestCycle !== 90) {
       setOptimizedCycle(bestCycle)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    setMounted(true)
+    const current = getUserSettings()
+    if (current) {
+      setSettings(current)
+      setTheme(current.themePreference)
+      calculateOptimalCycle()
+    }
+  }, [calculateOptimalCycle, setTheme])
 
   const handleSave = () => {
     if (!settings) return
@@ -247,8 +248,12 @@ export default function SettingsPage() {
                 </div>
                 <Switch
                   id="theme-toggle"
-                  checked={theme === "dark"}
-                  onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+                  checked={settings.themePreference === "dark"}
+                  onCheckedChange={(checked) => {
+                    const nextTheme = checked ? "dark" : "light"
+                    setTheme(nextTheme)
+                    setSettings({ ...settings, themePreference: nextTheme })
+                  }}
                 />
               </div>
               

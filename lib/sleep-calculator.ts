@@ -1,3 +1,5 @@
+import { STORAGE_KEYS } from "./storage-keys"
+
 export interface SleepSettings {
   cycleDuration: number // in minutes, default 90
   fallAsleepTime: number // in minutes, default 15
@@ -153,7 +155,7 @@ export function formatTime(date: Date, format?: "12h" | "24h"): string {
   // If format not provided, check user settings from localStorage
   if (!format && typeof window !== "undefined") {
     try {
-      const settings = localStorage.getItem("userSettings")
+      const settings = localStorage.getItem(STORAGE_KEYS.USER_SETTINGS)
       if (settings) {
         const parsed = JSON.parse(settings)
         format = parsed.timeFormat || "12h"
